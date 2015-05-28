@@ -8,15 +8,14 @@ var publicPath = path.join(__dirname, '../public');
 var indexHtmlPath = path.join(__dirname, '../index.html');
 
 var FlashCardModel = require('./models/flash-card-model');
+var _ = require('lodash');
 
 app.use(express.static(publicPath));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
-app.get('/', function (req, res) {
-    res.sendFile(indexHtmlPath);
-});
+
 
 
 app.get('/cards', function (req, res) {
@@ -41,4 +40,37 @@ app.post('/cards', function (req, res) {
         res.status(500).send(err.message);
     });
 
+});
+
+app.delete('/cards', function (req, res) {
+
+    FlashCardModel.remove({ _id: req.query.card }, function(err) {
+        res.send("deleted " + req.query.card);
+    }, function (err) {
+        res.status(500).send(err.message);
+    });
+
+});
+
+app.get('/getCardInfo', function (req, res) {
+
+    FlashCardModel.findOne({ _id: req.query.card }, function (err, card) {
+        res.send(card);
+    });
+
+});
+
+app.post('/updateCard', function (req, res) {
+
+    console.log('sdfgsdfsdfsdfsdfsdfsdfs test');
+    console.log("updating card", req.body.params.id);
+
+    FlashCardModel.findOneAndUpdate({ _id: req.body.params.id }, req.body.params.fullCard, {new: false}, function (err, updatedCard) {
+        res.send(updatedCard);
+    });
+
+});
+
+app.get('/*', function (req, res) {
+    res.sendFile(indexHtmlPath);
 });

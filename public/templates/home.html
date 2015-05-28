@@ -1,0 +1,22 @@
+<loader ng-show="cardsLoading"></loader>
+
+<div ng-hide="cardsLoading">
+
+    <button
+            class="category-button"
+            ng-click="getAllCards()"
+            ng-class="{ active: chosenCategory === 'All' }">
+        All Categories
+    </button>
+
+    <button
+            class="category-button"
+            ng-repeat="category in categories"
+            ng-click="getCategoryCards(category)"
+            ng-class="{ active: chosenCategory === category }">
+        {{ category }}
+    </button>
+
+    <flash-card card="entry" ng-repeat="entry in flashCards"></flash-card>
+
+</div>
